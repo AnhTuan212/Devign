@@ -115,7 +115,7 @@ def loads(data_sets_dir, ratio=1):
     data_sets_files.remove(data_sets_files[0])
 
     for ds_file in data_sets_files:
-        dataset = dataset.append(load(data_sets_dir, ds_file))
+        dataset = pd.concat([dataset, load(data_sets_dir, ds_file)], ignore_index=True)
 
     return dataset
 
