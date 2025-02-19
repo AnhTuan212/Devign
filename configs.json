@@ -16,7 +16,7 @@
     },
     "create" : {
         "filter_column_value": {"parent_commit_sha" : "qemu"},
-        "slice_size": 700,
+        "slice_size": 1000,
         "joern_cli_dir": "joern/joern-cli/"
     },
     "paths" : {
@@ -44,7 +44,7 @@
         "edge_type": "Ast"
     },
     "process" : {
-        "epochs" : 10,
+        "epochs" : 80,
         "patience" : 10,
         "batch_size" : 8,
         "dataset_ratio" : 0.5,
