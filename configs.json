@@ -29,7 +29,7 @@
         "w2v" : "data/w2v/"
     },
     "files" : {
-        "raw" : "dataset.json",
+        "raw" : "all_java_160924.json",
         "cpg" : "cpg",
         "tokens" : "tokens.pkl",
         "w2v" : "w2v.model",
