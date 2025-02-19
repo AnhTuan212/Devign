@@ -38,8 +38,8 @@ def select(dataset):
     
     # result = result[400:600]  # Chọn một phần dữ liệu nếu cần
 
-    # Lọc theo project nếu muốn
-    # result = dataset.loc[dataset['project'] == "FFmpeg"]
+    # Lọc theo parent_commit_sha nếu muốn
+    # result = dataset.loc[dataset['parent_commit_sha'] == "FFmpeg"]
 
     len_filter = result.function.str.len() < 1200
     result = result.loc[len_filter]
@@ -56,8 +56,8 @@ def select(dataset):
     #         des_folder = os.path.join('data/raw/NVD/rawdata_sel')
     #         shutil.move(source_file_path, des_folder)
     #     else:
-    #         source_file_path = os.path.join('data/raw/NVD', item['project'], item['repo'])
-    #         des_folder = os.path.join('data/raw/NVD/', item['project'] + '_sel')
+    #         source_file_path = os.path.join('data/raw/NVD', item['parent_commit_sha'], item['repo'])
+    #         des_folder = os.path.join('data/raw/NVD/', item['parent_commit_sha'] + '_sel')
     #         shutil.move(source_file_path, des_folder)
 
     # print(len(result))
@@ -89,7 +89,7 @@ def create_task():
     raw = data.read(PATHS.raw, FILES.raw)
     filtered = data.apply_filter(raw, select)
     filtered = data.clean(filtered)
-    data.drop(filtered, ["repo", "project"])
+    data.drop(filtered, ["repo", "parent_commit_sha"])
     slices = data.slice_frame(filtered, context.slice_size)
     slices = [(s, slice.apply(lambda x: x)) for s, slice in slices]
 
