@@ -15,27 +15,73 @@ from argparse import ArgumentParser
 
 from gensim.models.word2vec import Word2Vec
 
+import pandas as pd
+import torch
 import configs
 import src.data as data
 import src.prepare as prepare
 import src.process as process
 import src.utils.functions.cpg as cpg
+from torch.utils.data import DataLoader, Dataset, TensorDataset
+
 
 PATHS = configs.Paths()
 FILES = configs.Files()
 DEVICE = FILES.get_device()
 
 
+import os
+import shutil
+
 def select(dataset):
-    result = dataset.loc[dataset['project'] == "FFmpeg"]
+    result = dataset
+    
+    # result = result[400:600]  # Chọn một phần dữ liệu nếu cần
+
+    # Lọc theo project nếu muốn
+    # result = dataset.loc[dataset['project'] == "FFmpeg"]
+
     len_filter = result.func.str.len() < 1200
     result = result.loc[len_filter]
-    #print(len(result))
-    #result = result.iloc[11001:]
-    #print(len(result))
-    result = result.head(200)
+
+    print("result length:", len(result))
+
+    # Lặp qua từng dòng của dataset (hiện tại đang bị comment)
+    # for idx, item in result.iterrows():
+    #     print((item))
+    #     if 'level' in item['commit_id']:
+    #         source_name = item.split('.')[0][-5:] + '.c'
+    #         source_file_path = os.path.join('data/raw/NVD/rawdata/', source_name)
+    #         print(source_file_path)
+    #         des_folder = os.path.join('data/raw/NVD/rawdata_sel')
+    #         shutil.move(source_file_path, des_folder)
+    #     else:
+    #         source_file_path = os.path.join('data/raw/NVD', item['project'], item['commit_id'])
+    #         des_folder = os.path.join('data/raw/NVD/', item['project'] + '_sel')
+    #         shutil.move(source_file_path, des_folder)
+
+    # print(len(result))
+    # result = result.iloc[11001:]
+    # print(len(result))
+
+    # Chia nhỏ dữ liệu theo batch để tránh treo hệ thống
+    # result = result.head(2000)
+
+    # Cắt nhỏ dữ liệu theo từng phần để xử lý
+    # 0:200 -> batch 1
+    # 200:400 -> batch 2
+    # 400:600 -> batch 3
+    # ...
+    # 1200 -> batch cuối
+
+    true = result[result.target == 1]
+    false = result[result.target == 0]
+    true = true.head(216    )
+    false = false.head(1900)
+    result = pd.concat([false,true])
 
     return result
+
 
 
 def create_task():
@@ -81,8 +127,10 @@ def embed_task():
         cpg_dataset = data.load(PATHS.cpg, pkl_file)
         tokens_dataset = data.tokenize(cpg_dataset)
         data.write(tokens_dataset, PATHS.tokens, f"{file_name}_{FILES.tokens}")
+
+        
         # word2vec used to learn the initial embedding of each token
-        w2vmodel.build_vocab(sentences=tokens_dataset.tokens, update=not w2v_init)
+        w2vmodel.build_vocab(corpus_iterable=tokens_dataset.tokens, update=not w2v_init)
         w2vmodel.train(tokens_dataset.tokens, total_examples=w2vmodel.corpus_count, epochs=1)
         if w2v_init:
             w2v_init = False
@@ -128,6 +176,23 @@ def process_task(stopping):
 
     process.predict(model, test_loader_step)
 
+def process_task_eval():
+    context = configs.Process()
+    devign = configs.Devign()
+    model_path = PATHS.model + FILES.model
+    model = process.Devign(path=model_path, device=DEVICE, model=devign.model, learning_rate=devign.learning_rate,
+                           weight_decay=devign.weight_decay,
+                           loss_lambda=devign.loss_lambda)
+    model.load()
+    model.eval()
+    input_dataset = data.loads(PATHS.input)
+    _, test_loader,_ = list(
+        map(lambda x: x.get_loader(context.batch_size, shuffle=False),  # Không shuffle cho test
+            data.train_val_test_split(input_dataset, shuffle=False)))
+    
+    test_loader_step = process.LoaderStep("Test", test_loader, DEVICE)
+
+    process.predict(model, test_loader_step)
 
 def main():
     """
@@ -139,6 +204,7 @@ def main():
     parser.add_argument('-e', '--embed', action='store_true')
     parser.add_argument('-p', '--process', action='store_true')
     parser.add_argument('-pS', '--process_stopping', action='store_true')
+    parser.add_argument('-pt', '--process_task_eval', action='store_true')
 
     args = parser.parse_args()
 
@@ -150,6 +216,8 @@ def main():
         process_task(False)
     if args.process_stopping:
         process_task(True)
+    if args.process_task_eval:
+        process_task_eval()
 
 
 
