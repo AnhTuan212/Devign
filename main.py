@@ -49,14 +49,14 @@ def select(dataset):
     # Lặp qua từng dòng của dataset (hiện tại đang bị comment)
     # for idx, item in result.iterrows():
     #     print((item))
-    #     if 'level' in item['commit_id']:
+    #     if 'level' in item['repo']:
     #         source_name = item.split('.')[0][-5:] + '.c'
     #         source_file_path = os.path.join('data/raw/NVD/rawdata/', source_name)
     #         print(source_file_path)
     #         des_folder = os.path.join('data/raw/NVD/rawdata_sel')
     #         shutil.move(source_file_path, des_folder)
     #     else:
-    #         source_file_path = os.path.join('data/raw/NVD', item['project'], item['commit_id'])
+    #         source_file_path = os.path.join('data/raw/NVD', item['project'], item['repo'])
     #         des_folder = os.path.join('data/raw/NVD/', item['project'] + '_sel')
     #         shutil.move(source_file_path, des_folder)
 
@@ -89,7 +89,7 @@ def create_task():
     raw = data.read(PATHS.raw, FILES.raw)
     filtered = data.apply_filter(raw, select)
     filtered = data.clean(filtered)
-    data.drop(filtered, ["commit_id", "project"])
+    data.drop(filtered, ["repo", "project"])
     slices = data.slice_frame(filtered, context.slice_size)
     slices = [(s, slice.apply(lambda x: x)) for s, slice in slices]
 
