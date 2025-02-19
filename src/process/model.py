@@ -47,7 +47,12 @@ class Conv(nn.Module):
     def forward(self, hidden, x):
         concat = torch.cat([hidden, x], 1)
         concat_size = hidden.shape[1] + x.shape[1]
-        concat = concat.view(-1, self.conv1d_1_args["in_channels"], concat_size)
+        total_elements = concat.numel()  # Số phần tử trong tensor
+        fixed_size = self.conv1d_1_args["in_channels"] * concat_size
+
+        # Tìm kích thước gần nhất có thể chia hết
+        adjusted_size = total_elements // fixed_size  # Lấy số nguyên gần nhất
+        concat = (adjusted_size, self.conv1d_1_args["in_channels"], concat_size)
 
         Z = self.mp_1(F.relu(self.conv1d_1(concat)))
         Z = self.mp_2(self.conv1d_2(Z))
