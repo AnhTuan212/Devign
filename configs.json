@@ -37,7 +37,7 @@
         "model" : "checkpoint.pt"
     },
     "embed" : {
-        "nodes_dim" : 310,
+        "nodes_dim" : 280,
         "word2vec_args": {"vector_size" : 100, "alpha" : 0.01, "window" : 5, "min_count" : 3, "sample" : 1e-5,
                 "workers" : 4, "sg" : 1, "hs" : 0, "negative" : 5
             },
