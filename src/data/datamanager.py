@@ -19,7 +19,6 @@ def read(path, json_file):
     """
     return pd.read_json(path + json_file)
 
-
 def get_ratio(dataset, ratio):
     approx_size = int(len(dataset) * ratio)
     return dataset[:approx_size]
@@ -81,9 +80,9 @@ def train_val_test_split(data_frame: pd.DataFrame, shuffle=True):
     false = data_frame[data_frame.vulnerable == 0]
     true = data_frame[data_frame.vulnerable == 1]
     print("Day la 0 va 1 :", len(false)," ",len(true))
-    train_false, test_false = train_test_split(false, test_size=0.9, shuffle = True , random_state = 42)
+    train_false, test_false = train_test_split(false, test_size=0.2, shuffle = True , random_state = 42)
     test_false, val_false = train_test_split(test_false, test_size=0.5, shuffle = True , random_state = 42)
-    train_true, test_true = train_test_split(true, test_size=0.9, shuffle = True , random_state = 42)
+    train_true, test_true = train_test_split(true, test_size=0.2, shuffle = True , random_state = 42)
     test_true, val_true = train_test_split(test_true, test_size=0.5, shuffle = True , random_state = 42)
     print("Day la test_true va val_true :", len(test_true)," ",len(val_true))
     print(test_true)
