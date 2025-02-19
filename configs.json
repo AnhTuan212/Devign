@@ -6,7 +6,7 @@
         "model": {
             "gated_graph_conv_args": {"out_channels" : 200, "num_layers" : 6, "aggr" : "add", "bias": true},
             "conv_args": {
-                "conv1d_1" : {"in_channels": 205, "out_channels": 50, "kernel_size": 3, "padding" : 1},
+                "conv1d_1" : {"in_channels": 310, "out_channels": 50, "kernel_size": 3, "padding" : 1},
                 "conv1d_2" : {"in_channels": 50, "out_channels": 20, "kernel_size": 1, "padding" : 1},
                 "maxpool1d_1" : {"kernel_size" : 3, "stride" : 2},
                 "maxpool1d_2" : {"kernel_size" : 2, "stride" : 2}
@@ -37,7 +37,7 @@
         "model" : "checkpoint.pt"
     },
     "embed" : {
-        "nodes_dim" : 280,
+        "nodes_dim" : 310,
         "word2vec_args": {"vector_size" : 100, "alpha" : 0.01, "window" : 5, "min_count" : 3, "sample" : 1e-5,
                 "workers" : 4, "sg" : 1, "hs" : 0, "negative" : 5
             },
