@@ -71,7 +71,7 @@ def json_process(in_path, json_file):
             cpg_string = jf.read()
             cpg_string = re.sub(r"io\.shiftleft\.codepropertygraph\.generated\.", '', cpg_string)
             cpg_json = json.loads(cpg_string)
-            container = [graph_indexing(graph) for graph in cpg_json["functions"] if graph["file"] != "N/A"]
+            container = [graph_indexing(graph) for graph in cpg_json["functions"] if graph["file"] != "<empty>"]
             return container
     return None
 
