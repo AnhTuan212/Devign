@@ -41,7 +41,7 @@ def select(dataset):
     # Lọc theo project nếu muốn
     # result = dataset.loc[dataset['project'] == "FFmpeg"]
 
-    len_filter = result.func.str.len() < 1200
+    len_filter = result.function.str.len() < 1200
     result = result.loc[len_filter]
 
     print("result length:", len(result))
