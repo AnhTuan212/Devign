@@ -74,8 +74,8 @@ def select(dataset):
     # ...
     # 1200 -> batch cuối
 
-    true = result[result.target == 1]
-    false = result[result.target == 0]
+    true = result[result.vulnerable == 1]
+    false = result[result.vulnerable == 0]
     true = true.head(216    )
     false = false.head(1900)
     result = pd.concat([false,true])
@@ -138,11 +138,11 @@ def embed_task():
         cpg_dataset["nodes"] = cpg_dataset.apply(lambda row: cpg.parse_to_nodes(row.cpg, context.nodes_dim), axis=1)
         # remove rows with no nodes
         cpg_dataset = cpg_dataset.loc[cpg_dataset.nodes.map(len) > 0]
-        cpg_dataset["input"] = cpg_dataset.apply(lambda row: prepare.nodes_to_input(row.nodes, row.target, context.nodes_dim,
+        cpg_dataset["input"] = cpg_dataset.apply(lambda row: prepare.nodes_to_input(row.nodes, row.vulnerable, context.nodes_dim,
                                                                                     w2vmodel.wv, context.edge_type), axis=1)
         data.drop(cpg_dataset, ["nodes"])
         print(f"Saving input dataset {file_name} with size {len(cpg_dataset)}.")
-        data.write(cpg_dataset[["input", "target"]], PATHS.input, f"{file_name}_{FILES.input}")
+        data.write(cpg_dataset[["input", "vulnerable"]], PATHS.input, f"{file_name}_{FILES.input}")
         del cpg_dataset
         gc.collect()
     print("Saving w2vmodel.")

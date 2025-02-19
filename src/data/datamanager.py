@@ -78,8 +78,8 @@ def inner_join_by_index(df1, df2):
 def train_val_test_split(data_frame: pd.DataFrame, shuffle=True):
     print("Splitting Dataset")
 
-    false = data_frame[data_frame.target == 0]
-    true = data_frame[data_frame.target == 1]
+    false = data_frame[data_frame.vulnerable == 0]
+    true = data_frame[data_frame.vulnerable == 1]
 
     train_false, test_false = train_test_split(false, test_size=0.2, shuffle=shuffle)
     test_false, val_false = train_test_split(test_false, test_size=0.5, shuffle=shuffle)
