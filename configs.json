@@ -15,7 +15,7 @@
         }
     },
     "create" : {
-        "filter_column_value": {"project" : "qemu"},
+        "filter_column_value": {"parent_commit_sha" : "qemu"},
         "slice_size": 100,
         "joern_cli_dir": "joern/joern-cli/"
     },
