@@ -56,7 +56,7 @@ def tokenize(data_frame: pd.DataFrame):
 
 def to_files(data_frame: pd.DataFrame, out_path):
     # path = f"{self.out_path}/{self.dataset_name}/"
-    os.makedirs(out_path, exist_ok=True)
+    os.makedirs(out_path,exist_ok=True)
 
     for idx, row in data_frame.iterrows():
         file_name = f"{idx}.c"
@@ -78,8 +78,8 @@ def inner_join_by_index(df1, df2):
 def train_val_test_split(data_frame: pd.DataFrame, shuffle=True):
     print("Splitting Dataset")
 
-    false = data_frame[data_frame.vulnerable == 0]
-    true = data_frame[data_frame.vulnerable == 1]
+    false = data_frame[data_frame.target == 0]
+    true = data_frame[data_frame.target == 1]
     print("Day la 0 va 1 :", len(false)," ",len(true))
     train_false, test_false = train_test_split(false, test_size=0.95, shuffle = True , random_state = 42)
     test_false, val_false = train_test_split(test_false, test_size=0.05, shuffle = True , random_state = 42)
