@@ -47,9 +47,9 @@ def rename(data_frame: pd.DataFrame, old, new):
 
 
 def tokenize(data_frame: pd.DataFrame):
-    data_frame.func = data_frame.func.apply(parse.tokenizer)
+    data_frame.function = data_frame.function.apply(parse.tokenizer)
     # Change column name
-    data_frame = rename(data_frame, 'func', 'tokens')
+    data_frame = rename(data_frame, 'function', 'tokens')
     # Keep just the tokens
     return data_frame[["tokens"]]
 
@@ -61,7 +61,7 @@ def to_files(data_frame: pd.DataFrame, out_path):
     for idx, row in data_frame.iterrows():
         file_name = f"{idx}.c"
         with open(out_path + file_name, 'w') as f:
-            f.write(row.func)
+            f.write(row.function)
 
 
 def create_with_index(data, columns):
@@ -117,7 +117,7 @@ def loads(data_sets_dir, ratio=1):
 
 
 def clean(data_frame: pd.DataFrame):
-    return data_frame.drop_duplicates(subset="func", keep=False)
+    return data_frame.drop_duplicates(subset="function", keep=False)
 
 
 def drop(data_frame: pd.DataFrame, keys):
