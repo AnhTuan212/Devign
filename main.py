@@ -77,7 +77,7 @@ def select(dataset):
     true = result[result.vulnerable == 1]
     false = result[result.vulnerable == 0]
     true = true.head(7500)
-    false = false.head(14500)
+    false = false.head(16500)
     result = pd.concat([false,true])
 
     return result
