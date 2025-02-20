@@ -46,7 +46,7 @@ def rename(data_frame: pd.DataFrame, old, new):
 
 
 def tokenize(data_frame: pd.DataFrame):
-    data_frame.function = data_frame.function.apply(parse.tokenizer)    
+    data_frame.func = data_frame.func.apply(parse.tokenizer)    
     # Change column name
     data_frame = rename(data_frame, 'function', 'tokens')
     # Keep just the tokens
